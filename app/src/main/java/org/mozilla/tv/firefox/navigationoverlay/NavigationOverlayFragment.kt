@@ -147,8 +147,7 @@ class NavigationOverlayFragment : Fragment() {
         ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
-            { currFocus },
-            ::updateFocusableViews,
+            { updateFocusableViews() },
             onNavigationEvent
         ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
 
