@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.toolbar
+package org.mozilla.tv.firefox.navigationoverlay
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
@@ -13,7 +13,6 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataCombiners
-import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.SetOnlyLiveData
 import org.mozilla.tv.firefox.utils.URLs
@@ -51,21 +50,21 @@ class ToolbarViewModel(
     // We use events in order to decouple the ViewModel from holding a reference to a context
     val events: LiveData<Consumable<Action>> = _events
 
-    val state: LiveData<ToolbarViewModel.State> =
+    val state: LiveData<State> =
         LiveDataCombiners.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
-            ToolbarViewModel.State(
-                backEnabled = sessionState.backEnabled,
-                forwardEnabled = sessionState.forwardEnabled,
-                refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                pinChecked = isCurrentURLPinned(),
-                turboChecked = sessionState.turboModeActive,
-                desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                desktopModeChecked = sessionState.desktopModeActive,
-                urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
+            State(
+                    backEnabled = sessionState.backEnabled,
+                    forwardEnabled = sessionState.forwardEnabled,
+                    refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+                    pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+                    pinChecked = isCurrentURLPinned(),
+                    turboChecked = sessionState.turboModeActive,
+                    desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+                    desktopModeChecked = sessionState.desktopModeActive,
+                    urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
             )
         }
 
